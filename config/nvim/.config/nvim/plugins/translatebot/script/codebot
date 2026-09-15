@@ -1,0 +1,279 @@
+#!/usr/bin/env python
+from functools import partial
+
+"""
+Script that can:
+- generate function from description
+- generate class and internal methods from description
+- generate docstrings from code
+
+Usage:
+- generate function from description:
+    codebot -f <<function desc>>
+- generate docstring from function code:
+    codebot -d <<function code>>
+- generate class from description:
+    codebot -c <<class description>>
+"""
+
+import json
+import sys
+
+from groq import Groq
+
+model = "mixtral-8x7b-32768"
+model = "llama3-70b-8192"
+
+
+prompts = {
+    "docstring": {
+        "system": """
+        You are a helpful coding assistant. You will be provided with a python
+        function. Your task is to write the function with the same functionality,
+        but with an included detailed docstring.
+        Style of docstring:
+        ---
+        Short description.
+
+        Long description.
+
+        Args:
+            arg: type
+                description
+            arg: type
+                description
+
+        Returns:
+            type: description
+
+        Examples:
+        >>> example
+        >>> example
+        ---
+
+        Reminder:
+        - do not include tickmarks to separate the code
+        - include only the code, code comments and docstring
+        - optimize and simplify the code
+        - change variable names and function name to make the code more readable
+        - write type annotations
+        - do not include anything else besides the code
+        """,
+        "user": "Input:\n```\n{text}\n```",
+    },
+    "function": {
+        "system": """
+        You are a helpful coding assistant. You will be provided with a
+        description of function in plain language.
+        Your task is to write the function with the same functionality, including type
+        annotations and a detailed docstring.
+
+        Style of docstring:
+        ---
+        Short description.
+
+        Long description.
+
+        Args:
+            arg: type
+                description
+            arg: type
+                description
+
+        Returns:
+            type: description
+
+        Examples:
+        >>> example
+        >>> example
+        ---
+
+        Reminder:
+        - do not include tickmarks to separate the code
+        - include only the code, code comments and docstring
+        - optimize and simplify the code
+        - change variable names and function name to make the code more readable
+        - write type annotations
+        - do not include anything else besides the code
+        """,
+        "user": "Input:\n```\n{text}\n```",
+    },
+    "class": {
+        "system": """
+        You are a helpful coding assistant.
+        You will be provided with a description of class functionality.
+        Your task is to write a class with the same functionality,
+        including all the necessary methods and variables.
+        All variables should have type annotations and all methods should have a detailed docstring.
+
+        Style of docstring:
+        ---
+        Short description.
+
+        Long description.
+
+        Args:
+            arg: type
+                description
+            arg: type
+                description
+
+        Returns:
+            type: description
+
+        Examples:
+        >>> example
+        >>> example
+        ---
+
+        Reminder:
+        - do not include tickmarks to separate the code
+        - include only the code, code comments and docstring
+        - optimize and simplify the code
+        - change variable names and function name to make the code more readable
+        - write type annotations
+        - do not include anything else besides the code
+        """,
+        "user": "Input:\n```\n{text}\n```",
+    },
+}
+
+
+def make_output(text: str, prompt_key: str) -> str:
+    """
+    Make output.
+    """
+    client = Groq()
+    prompt = prompts[prompt_key]
+    out = client.chat.completions.create(
+        messages=[
+            {"role": "assistant", "content": prompt["system"]},
+            {"role": "user", "content": prompt["user"].format(text=text)},
+        ],
+        model=model,
+    )
+
+    out = out.choices[0].message.content
+
+    return out
+
+
+make_docstring = partial(make_output, prompt_key="docstring")
+make_class = partial(make_output, prompt_key="class")
+make_function = partial(make_output, prompt_key="function")
+
+
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "make_docstring",
+            "description": "Make a docstring for a function given the code",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "description": "Function code.",
+                    }
+                },
+                "required": ["text"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "make_class",
+            "description": "Write code for a class given description",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "description": "Description of the class functionality",
+                    }
+                },
+                "required": ["text"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "make_function",
+            "description": "Write code for a function given description",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "description": "Description of the function functionality",
+                    }
+                },
+                "required": ["text"],
+            },
+        },
+    },
+]
+functions = {
+    "make_docstring": make_docstring,
+    "make_class": make_class,
+    "make_function": make_function,
+}
+
+
+if __name__ == "__main__":
+    print(sys.argv)
+    sys.exit()
+    if len(sys.argv) < 2:
+        sys.exit(1)
+
+    user_input = "\n".join(sys.argv[1:])
+    code_input = """
+    def sum_two_numbers(a, z):
+        xx = a + z + z
+        yy = a - z
+        return yy + 1 - 1
+    """
+
+    fn_input = """function that makes an RGB array from a grayscale numpy array."""
+    cls_input = """class that scans a given directory for images, saves the images in the variable, and allows the user to iterate through them"""
+    # user_input = cls_input
+
+    messages = [
+        {
+            "role": "system",
+            "content": """
+            You are a function calling LLM that uses tools to help the user.
+            Depending on the user prompt, choose the right tool.
+            """,
+        },
+        {
+            "role": "user",
+            "content": user_input,
+        },
+    ]
+
+
+    client = Groq()
+    out = client.chat.completions.create(
+        model=model,
+        messages=messages,
+        tools=tools,
+        tool_choice="auto",
+    )
+    out = out.choices[0].message
+    tool_calls = out.tool_calls
+    if tool_calls:
+        args = json.loads(tool_calls[0].function.arguments)
+        name = tool_calls[0].function.name
+        out = functions[name](**args)
+        for line in out.split("\n"):
+            if "```" in line:
+                continue
+            print(line)
+
+
+    else:
+        sys.exit(1)

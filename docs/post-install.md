@@ -78,20 +78,17 @@ load the environment, aliases, and functions in this repository.
 
 ```sh
 yay -S neovim vim
-sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 ```
 
-The plugin declarations are in [config/nvim/init.vim](../config/nvim/init.vim).
 Follow the [Neovim configuration instructions](../config/nvim/README.md) to
-link the configuration and snippets into place. The
-[vim-plug documentation](https://github.com/junegunn/vim-plug#usage) explains how
-to edit the plugin list.
+install this repository's Stow package. The current configuration uses Lua and
+lazy.nvim; its [plugin declarations](../config/nvim/.config/nvim/lua/plugins/)
+and [lockfile](../config/nvim/.config/nvim/lazy-lock.json) are included.
 
-Once that configuration is loaded, run this **inside Neovim**:
+Once the configuration is linked, open Neovim and restore the recorded versions:
 
 ```vim
-:PlugInstall
+:Lazy restore
 ```
 
 ## Sudo preferences (optional)

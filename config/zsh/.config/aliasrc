@@ -1,0 +1,322 @@
+alias emacs='nvim'
+alias startx='cd && startx "$XDG_CONFIG_HOME/X11/xinitrc" -- "$XDG_CONFIG_HOME/X11/xserverrc" vt1'
+alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
+alias asyfixed='asy -epsdriver=ps2write -maxtile "(256, 256)"'
+alias duhs='du -h --summarize'
+alias duds='fd --type d --max-depth 1 --exec du -hs {} \;'
+alias dfh='df -h'
+alias daily='most ~/wiki/Tasks.md'
+
+# basic things
+alias rmdir='rmdir -v'
+alias mkdir='mkdir -pv'
+alias mv='mv -vi'
+alias cp='cp -riv'
+alias rm='rm -vi'
+alias diff='diff --color'
+
+# dwm
+alias swa='dwmswallow $WINDOWID;'
+
+# FZF
+alias fzfse='fzf --bind "enter:execute(xdg-open {})"' # fzf and execute, but doesnt quit fzf
+alias fzfex='fzf | xargs -r -i xdg-open "{}"' # fzf and execute, exit fzf
+alias fzfde='fzf | xargs -r -i zsh -c "xdg-open \"{}\" &!"' # fzf and execute, exit fzf
+
+# alias mountC='sudo mount -t ntfs -o rw,auto,user,fmask=0022,dmask=0000 /dev/sda3 /mnt/diskC'
+# alias mountD='sudo mount -t ntfs -o rw,auto,user,fmask=0022,dmask=0000 /dev/sda4 ~/data'
+
+alias ls='ls -bhF --color=auto --group-directories-first'
+alias dir='dir --color'
+alias vdir='vdir --color'
+alias la='ls -bA'
+alias ll='ls -lbh'
+alias lla='ll -Ab'
+alias lc='ls -Cb'
+alias lst='ls --sort=time'
+alias lstr='ls --sort=time --reverse'
+alias llt='ls -lb --sort=time'
+alias lltr='ls -lb --sort=time --reverse'
+alias lss='ls --sort=size'
+alias lssr='ls --sort=size --reverse'
+alias lls='ls -sb --sort=size'
+alias llsr='ls -sb --sort=size --reverse'
+alias ln='ln -iv'
+alias lshuf='\ls -sh --color | shuf | head'
+alias lsc="ls | sed 's/\[/ /g' | sed 's/\]/ /g'"
+
+alias vi='nvim -p'
+alias grep='rg'
+alias egrep='egrep --color'
+alias fgrep='fgrep --color'
+alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
+alias howmany='ls | wc -l'
+
+# alias randomwallpaper='/home/skm/code/scripts/randomwallpaperonce.sh'
+# alias wallpapername='/home/skm/code/scripts/wallpapername'
+# alias updatebar='/home/skm/code/scripts/bar/updatebar'
+
+# KEYBOARD
+# alias setkeyboard='setxkbmap -layout us,ru,hu,hr,kr,jp,tw -option grp:alt_shift_toggle -option caps:swapescape && xmodmap ~/.config/X11/Xmodmap'
+alias setkeyboard='setxkbmap -layout us,ru,hu,hr,kr,jp,tw -option grp:alt_shift_toggle -option caps:swapescape ; xset r rate 200 100'
+
+# SCREEN
+alias screenkcdoubleright='/home/skm/code/scripts/screenlayout/kcdoubleright.sh'
+# alias screenkcdoubleleft='/home/skm/code/scripts/screenlayout/kcdoubleleft.sh'
+# alias screensingle='/home/skm/code/scripts/screenlayout/single.sh'
+alias screenmbdoubleacright='/home/skm/code/scripts/screenlayout/mbdoublerightac.sh'
+
+# CD
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias cdskm='cd ~/code/skm'
+alias cdnotes='cd ~/data/Karlo/notes'
+alias cdcs='cd ~/data/compsci'
+alias cdphy='cd ~/data/physics'
+alias cdmat='cd ~/data/math'
+alias cdbook='cd ~/data/books'
+alias cdpyt='cd ~/data/compsci/python'
+alias cdlatex='cd ~/docs/latex'
+alias cdsch='cd ~/data/school'
+alias cdmnat='cd ~/data/Math/Natjecanje'
+alias cdfnat='cd ~/data/Physics/Zadaci'
+alias cddoc='cd ~/docs'
+alias cddow='cd ~/dls'
+alias cddl='cd ~/dls'
+alias cdscs='cd ~/code/scripts'
+alias cdcode='cd ~/code'
+alias cdpic='cd ~/pics'
+alias cdpath='cd ~/code/scripts/pathscripts'
+alias cdwiki="cd ~/docs/wiki"
+alias cddata="cd /mnt/data/"
+alias cdcsat="cd ~/code/_scrappers/CSAT"
+alias cdss='cd ~/pics/screenshots'
+alias cdml='cd ~/code/_ml'
+alias cdgit='cd ~/code/git'
+alias cdkor='cd /mnt/data/Language/Korean'
+alias cdbmt='cd ~/code/_job/bmt'
+alias cdunsorted='cd ~/data/tmp/todo-unsorted'
+alias cdnlp='cd ~/data/ai/nlp'
+alias cdcv='cd ~/data/ai/cv'
+# alias cdvid='cd ~/data/tmp/todo-vids'
+alias cdtmp='cd /mnt/data/tmp'
+alias cdvim='cd ~/.config/nvim'
+alias cdsite='cd ~/code/git/site'
+alias cdcron="cd ~/code/scripts/cron_scripts"
+
+# VI
+alias vizsh='nvim ~/.config/zsh/.zshrc'
+alias vivi='nvim ~/.config/nvim/init.lua'
+alias vinews='nvim ~/.config/newsboat/urls'
+alias viwiki='nvim ~/docs/wiki/index.md'
+alias visxhk='nvim ~/.config/sxhkd/sxhkdrc'
+alias vienv='nvim ~/.config/env'
+alias vikajk='nvim ~/docs/wiki/Kajkavski.md'
+alias vibooks='nvim ~/docs/wiki/Books.md'
+alias vimovies='nvim ~/docs/wiki/Movies.md'
+alias vitrack='nvim ~/docs/wiki/Keeping\ Track.wiki'
+alias vipy='nvim ~/docs/wiki/Python.wiki'
+alias vics='nvim ~/docs/wiki/CS.wiki'
+alias viml='nvim ~/docs/latex/notes/ML.tex'
+alias viai='nvim ~/docs/wiki/AI.wiki'
+alias vimat='nvim /home/skm/docs/wiki/Mathematics.wiki'
+alias viphy='nvim /home/skm/docs/wiki/Physics.wiki'
+alias vishell='nvim ~/docs/wiki/shell.wiki'
+alias vilin='nvim ~/docs/wiki/linux.wiki'
+alias vichin='nvim ~/docs/wiki/China.wiki'
+alias vikor='nvim ~/docs/wiki/Korea.wiki'
+alias vijap='nvim ~/docs/wiki/Japan.wiki'
+alias vialias='nvim ~/.config/aliasrc'
+alias viprob='nvim /home/skm/latex/notes/problems.tex'
+alias vifn='nvim ~/.config/fnrc'
+alias viwi='nvim "$(fd ~/docs/wiki -type f | fzf --height 8)"'
+alias vihist='nvim $HISTFILE'
+alias vimark='nvim ~/.local/share/bookmarks'
+# alias vopen='nvim "$(fd . -maxdepth 1 -type f | fzf --height 16 --preview="bat --color=always {}")"'
+alias vidir='nvim /home/skm/.local/share/dirs'
+
+# YT
+alias youtube-dl="yt-dlp"
+alias ytfk='youtube-dl --format "bestvideo+bestaudio[ext=m4a]/bestvideo+bestaudio/best" -o "~/figureSkating/unsorted/z/%(title)s.%(ext)s" '
+alias ytzkr='youtube-dl --extract-audio --audio-format mp3 -o "~/Music/zika/rus/unsorted/%(title)s.%(ext)s" '
+alias ytzkc='youtube-dl --extract-audio --audio-format mp3 -o "~/Music/zika/good/unsorted/%(title)s.%(ext)s" '
+alias ytzkg='youtube-dl --extract-audio --audio-format mp3 -o "~/Music/zika/old/unsorted/%(title)s.%(ext)s" '
+alias ytsp='youtube-dl --format "bestvideo+bestaudio[ext=m4a]/bestvideo+bestaudio/best" -o "~/media/sport/%(title)s.%(ext)s" '
+alias ytvid='youtube-dl --format "bestvideo+bestaudio[ext=m4a]/bestvideo+bestaudio/best" '
+alias ytvid4='youtube-dl --format "bestvideo+bestaudio[ext=m4a]/bestvideo+bestaudio/best" --merge-output-format mp4 '
+alias yta="youtube-dl -x -f bestaudio/best --extractor-args 'youtube:player-client=default,-tv_simply'"
+alias yta3="youtube-dl --extract-audio --audio-format mp3"
+alias ytchn="youtube-dl --skip-download --get-id --get-title"
+alias ytdesc="youtube-dl --skip-download --get-description"
+alias yttitle="youtube-dl --skip-download --get-title"
+alias ytlist="youtube-dl --list-formats"
+alias yt22="yt-dlp --no-warnings -f '399+bestaudio/398+bestaudio/22/bestvideo[height<=1080]+bestaudio'"
+# alias yt22="yt-dlp --extractor-args 'youtube:player_js_version=actual'"
+alias ytworst="yt-dlp -f worst"
+
+
+# GIT
+alias gitpushu='git push -u origin master'
+alias gitgraph=" git log --graph --all --oneline"
+alias gs='git status'
+alias gp='git push'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gcam='git commit -am'
+# alias gitposel='git config user.email "serbetar.karlo.p@protonmail.com"; git config user.name "Šerbetar Karlo"'
+alias gitposel='git config user.email "81467747+se-kami@users.noreply.github.com"; git config user.name "Šerbetar Karlo"'
+alias gitgitlab='git config user.email "7682435-_skm@users.noreply.gitlab.com"; git config user.name "_skm"'
+alias gitprivate='git config user.email "karlo@serbetar.com"; git config user.name "skm"'
+
+
+# TMUX
+alias devtmux="tmux new-session \; \
+  split-window -v -p 25 \; \
+  split-window -h -p 30 \; \
+  select-pane -t 0 \;"
+
+# GPU
+alias usegpu="DRI_PRIME=1"
+
+# PING
+alias ping1='ping 1.1.1.1'
+alias ping0='ping 1.0.0.1'
+
+# DWMBLOCKS
+alias blocksreset='pkill dwmblocks; dwmblocks &!'
+
+# newsboat
+alias newz='newsboat'
+alias newzr='newsboat -x reload'
+alias newzu='newsboat -x print-unread'
+alias newz='newsboat -u $XDG_CONFIG_HOME/newsboat/urls -C $XDG_CONFIG_HOME/newsboat/config -c $XDG_DATA_HOME/newsboat/cache.db'
+
+# my programs
+alias mediaDivide='python /home/skm/code/media_divider/media_divider.py'
+
+# transmission daemon
+alias transmission-daemon='transmission-daemon -e /home/skm/.cache/transmission-daemon.log'
+alias torr-cmd='transmission-remote --auth skm:"$(cat /home/skm/Documents/.secret/transmission/skm)"'
+alias transmission-daemon='echo NO'
+# alias transmission='echo NO'
+
+# ps
+alias psuserm='ps -u $USER -o pid,%mem,%cpu,comm | sort -b -k2 -r'
+alias psuserc='ps -u $USER -o pid,%mem,%cpu,comm | sort -b -k3 -r'
+
+# history
+alias histfzfu='history -20000 | cut -c 8- | sort | uniq | fzf --height=10 | tr -d "\n"'
+alias histfzf='history -20000 | cut -c 8- | tac | fzf +s --height=15 | tr -d "\n"'
+alias hf='history -200000 | tac | fzf'
+
+# random file
+alias randomfile='\ls -A | shuf -n 1'
+alias randomfile='fd --type f --maxdepth 1 | shuf -n 1'
+alias largestfile='\ls -S | head -1'
+alias rf=randomfile
+alias fl=largestfile
+alias flc='fl | clipcopy'
+alias rff='fd . --type f | shuf | head -1'
+
+# keyboard
+alias typegood='setxkbmap -layout us,ru,hu,hr -option grp:alt_shift_toggle -option caps:swapescape &'
+
+# monero
+alias monderod='monerod --data-dir /home/skm/.local/share/bitmonero'
+
+# ytfzf
+alias ytf='ytfzf -t -l -f --url-handler-opts="--quiet"'
+
+# rsync
+alias cpr='rsync -avzs --partial --progress --append -e ssh'
+
+# chmod
+alias chmodx='chmod +x'
+
+# zathura
+alias zat='swa zathura'
+
+# get random unsorted
+alias getrandomuns='echo $(( $RANDOM % $(wc -l /home/skm/Documents/wiki/Tasks.wiki | cut -d" " -f1) ))'
+
+# matrix
+alias matDec='matrix_decrypt'
+
+# perl
+alias perlRemoveEOF="perl -pi -e 'chomp if eof'"
+
+# get default permissions
+alias set-default-permissions='(fd --type d -exec chmod 755 {} \;) && (fd --type f -exec chmod 644 {} \;)'
+
+# get invidious instances
+alias getINV1='curl -s "https://redirect.invidious.io/" | grep "Available instances" | sed "s/a href=\"/\n/g;s/\">/\n/g" | grep https | head -10 | paste -s -d ","'
+alias getINV2='curl -s "https://api.invidious.io/?sort_by=health" | pup | grep -v "github.com" | grep "href=\"https" | sed "s/\s*<a href=\"//g" | sed "s/\">//g" | head -8 | paste -s -d ","'
+
+# folder open
+alias fopen='cd "$(dirname "$(fzf)")"'
+
+# yarn
+alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
+
+# lossless image optimization
+# alias optimize_png="find ./ -type f \( -iname \*.png \) -print0 | parallel -0 --bar ect -9 -strip {} \;"
+# alias optimize_jpg="find ./ -type f \( -iname \*.jp\*g \) -print0 | parallel -0 --bar jpegoptim -t --all-progressive --strip-all {} \;"
+# interjection
+# alias interject='echo I'd just like to interject for a moment. What you’re referring to as Linux, is in fact, GNU/Linux, or as I’ve recently taken to calling it, GNU plus Linux. Linux is not an operating system unto itself, but rather another free component of a fully functioning GNU system made useful by the GNU corelibs, shell utilities and vital system components comprising a full OS as defined by POSIX. Many computer users run a modified version of the GNU system every day, without realizing it. Through a peculiar turn of events, the version of GNU which is widely used today is often called “Linux”, and many of its users are not aware that it is basically the GNU system, developed by the GNU Project. There really is a Linux, and these people are using it, but it is just a part of the system they use. Linux is the kernel: the program in the system that allocates the machine’s resources to the other programs that you run. The kernel is an essential part of an operating system, but useless by itself; it can only function in the context of a complete operating system. Linux is normally used in combination with the GNU operating system: the whole system is basically GNU with Linux added, or GNU/Linux. All the so-called “Linux” distributions are really distributions of GNU/Linux.'
+
+# python
+alias jupy9='python3.9 -m jupyter notebook --no-browser'
+alias jupy10='python -m jupyter notebook --no-browser'
+
+# pactl
+alias audio-normal='pactl set-card-profile bluez_card.00_18_09_65_D2_E3 a2dp_sink'
+alias audio-talk='pactl set-card-profile bluez_card.00_18_09_65_D2_E3 handsfree_head_unit'
+
+# files
+alias -s {txt,py,c,cpp,md,tex}=vi
+alias -s {png,jpg,jpeg}=nsxiv
+alias -s {mp4,mkv,gif}=mkv
+alias -s {pdf,epub}=zathura
+
+# images
+alias sxiv='swa nsxiv'
+alias svi='swa nsxiv'
+
+# phone
+alias phone-mount='simple-mtpfs --device $(simple-mtpfs -l | fzf | cut -d: -f1) /mnt/nokia'
+alias phone-unmount='fusermount -u /mnt/nokia'
+
+# beast
+alias beast-proxy='ssh -N -D 1234 beast-remote'
+
+# cuda
+alias blockCUDA='export CUDA_VISIBLE_DEVICES=""'
+
+# sync
+alias watch_sync='watch -d grep -e Dirty: -e Writeback: /proc/meminfo'
+
+# JOB
+alias dilab-connect='pass posel/dilab/vpn | sudo openconnect vpn.hanyang.ac.kr --script "vpn-slice 166.104.110.79 166.104.112.206 166.104.110.44" --user=2022274322  --servercert pin-sha256:BQDT4us2hJADTuCcN/SXqbiLSST7beN06CtZRtlfHn8='
+
+# mail
+alias nmt='neomutt'
+alias mbsync='mbsync -c "$MBSYNCRC"'
+alias abook='abook --config "$XDG_CONFIG_HOME"/abook/abookrc --datafile "$XDG_DATA_HOME"/abook/addressbook'
+
+# mpv
+alias mpv='swa mpv'
+
+# temp
+alias cdcvpr='cd /home/skm/code/_ml/_research/2024-cvpr'
+
+# config
+alias configvi='cdvim ; vivi'
+
+# nestat
+alias netstat='netstat -tunlp'
+
+# ffmpeg
+alias merge-ts='ffmpeg -i "concat:$(echo *.ts | tr " " "\|")" -c copy -bsf:a aac_adtstoasc output.mp4'
+
+# pacman
+alias pacman-clean='yay -Runs $(yay -Qdtq)'

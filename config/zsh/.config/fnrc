@@ -1,0 +1,433 @@
+# vim: foldmethod=indent
+## functions to source in zsh
+
+mcd() {
+    mkdir -pv "$1"
+    cd "$1"
+}
+
+newLatexProblem() {
+    # name of file is arg1
+    cp /mnt/diskD/latex/templates/defaultStandalone.tex $1.tex
+}
+
+newLatexFile() {
+    cp -riv /mnt/diskD/latex/templates/defaultTemplate.tex $1.tex
+}
+
+newLatexDoc() {
+    # arguments are arg1 arg2 ... argN ---> path to folder is ./arg1/...
+    # name of file is argN
+    newFolderPath="./"
+    A=( "$@" )
+    len=${#A[@]}
+    let len-=1
+    name="${A[-1]}"
+    for (( c=0; c<=$len; c++ )) do;
+        arg=${A[$c]}
+        newFolderPath=$newFolderPath$arg"/"
+    done
+    if [[ ! -d $newFolderPath ]] ; then
+        mkdir -pv $newFolderPath
+    fi
+    cp -riv /mnt/diskD/latex/templates/defaultTemplate.tex $newFolderPath
+    cp -riv /mnt/diskD/latex/templates/latexmkrc $newFolderPath
+    cd $newFolderPath
+    mkdir asy
+    mv defaultTemplate.tex $name".tex"
+}
+
+newLatexFolder() {
+    # arguments arg1 arg2 ... ---> path to folder is ./arg1/arg2/...
+    newFolderPath="./"
+    for arg in "$@"; do
+        newFolderPath=$newFolderPath$arg"/"
+    done
+    if [[ ! -d $newFolderPath ]] ; then
+        mkdir -pv $newFolderPath
+    fi
+    cp -riv /mnt/diskD/latex/skeleton/* $newFolderPath
+    cd $newFolderPath
+}
+
+xopen() {
+    # xdg-open "$(find -type f | fzf | tee)" 1>/dev/null 2>/dev/null
+    xfile=${"$(find -maxdepth 1 -type f | fzf --height 16 | tee)":2}
+    echo $xfile
+    swa xdg-open "$xfile" 1>/dev/null 2>/dev/null
+}
+
+ytyta() {
+    youtube-dlc -x -f bestaudio/best $1
+}
+
+ytytv() {
+    youtube-dlc --add-metadata --format "bestvideo+bestaudio[ext=m4a]/bestvideo+bestaudio/best" $1
+}
+
+fcd() {
+    cd "$(find -type d | fzf --height=10)"
+}
+
+gitcommsg() {
+    msg="$@"
+    git commit -m "$msg"
+}
+
+clipcopy() {
+    cat - | xclip -selection c
+}
+
+mpvyt() {
+    mpv "https://www.youtube.com/watch?v=$1"
+}
+
+wttrin() {
+    place=$(echo $@ | sed 's/\ /%20/g')
+    curl -s wttr.in/$place
+}
+
+untag() {
+    for f in $@; do
+        ffmpeg -i "$f" -map_metadata -1 "2.$f"
+    done
+}
+
+tomobi() {
+    for f in $@; do
+        ebook-convert $f .mobi
+    done
+}
+
+topdf() {
+    for f in $@; do
+        ebook-convert $f .pdf
+    done
+}
+
+timeNotify() {
+    date
+    echo "to wait: $1"
+    sleep $1 && notify-send $2
+}
+
+# transmission
+torr-list() {
+    transmission-remote --auth skm:"$(cat /home/skm/Documents/.secret/transmission/skm)" -l
+}
+
+addcompletedtorrent() {
+    transmission-remote --auth skm:"$(cat /home/skm/docs/.secret/transmission/skm)" --torrent=$1 -a $1 --verify --download-dir=$2 --start
+}
+
+ccompile() {
+    name=$(echo "$1" | sed -e 's/\.[^.]*$//')
+    gcc $1 -o "$name.out"
+}
+
+Run() {
+    eval "./$1"
+}
+
+meddur() {
+    mediainfo $1 | grep "Duration" | head -1 | awk '{print $3 $4 " " $5 $6}'
+}
+
+cd_with_fzf() {
+    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)" && echo "$PWD" && tree -L 2
+}
+
+open_with_fzf() {
+    fd -t f -H -I | fzf -m --preview="xdg-mime query default {}" | xargs - ro -d "\n" xdg-open 2>&-
+}
+
+ffcut() {
+    ffmpeg -i "$1" -ss "$2" -to "$3" "$4"
+}
+
+ext-mount() {
+    # $1 for /dev/sdX, $2 for name
+    echo sudo cryptsetup open --type luks --key-file="/home/skm/docs/.secret/keyfiles/keyfile-$2" /dev/"$1" "$2"
+    echo sudo mount /dev/mapper/$2 /mnt/$2
+}
+
+ext-umount() {
+    # $1 for name, tosh-002
+    sudo umount /mnt/$1
+    cryptsetup close $1
+}
+
+chr() {
+    python -c "print(chr(int(\"$1\")))"
+}
+
+ord() {
+    python -c "print(ord(\"$1\"))"
+}
+
+# Shows arch packages in a nice window with fzf
+pacman-info() {
+    pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S
+}
+
+# Shows aur packages in a nice window with fzf
+yay-info() {
+    yay -Slq | fzf -m --preview 'cat <(yay -Si {1}) <(yay -Fl {1} | awk "{print \$2}")' | xargs -ro yay -S
+}
+
+cheat() {
+    curl cheat.sh/"$1"
+}
+
+upload0() {
+    curl -F "file=@$1" https://0x0.st/
+}
+
+# Change and list directory
+cdl() { cd "$1" && ls }
+
+# Make directory and change into it
+mkcdir() { mkdir "$@"; if [ "$1" = "-p" ]; then cd "$2"; else cd "$1"; fi }
+
+# Edit /etc/hosts
+hosts() { if [ `id -u` = 0  ]; then $EDITOR /etc/hosts ; else sudo $EDITOR /etc/hosts; fi }
+
+# Get PTR record from domain
+ptr() { IP=`dig +short A $1`; dig +short -x $IP }
+
+# Prevent ranger nesting
+ranger() { if [ -z "$RANGER_LEVEL" ]; then /usr/bin/ranger "$@"; else exit; fi }
+
+# search newsboat cache
+newzgrep() { grep --binary-files=text "$1" $XDG_DATA_HOME/newsboat/cache.db }
+
+# kill -9
+auxkill() {
+    procid="$(ps aux | fzf | awk '{print $2}')"
+    echo $procid | xclip -selection c
+    ps aux | grep $procid
+}
+
+stowConfig() {
+    STOW_DIR="/mnt/data/git/dotfiles/"
+    cd $STOW_DIR
+    stow --dotfiles -v -n -t "/home/skm/.config" .config
+}
+
+# get first item in array
+find_alt() {
+# usage find_alt prog1 prog2 prog3 ---> if only prog2 is installed, returns prog2
+    for i ; do which "$i" > /dev/null && {echo "$i" ; return 0;} ; done ; return 1;
+}
+
+extract() {
+    if [ -f $1 ] ; then
+        case "$1" in
+            (*.tar.bz2) tar xvjf "$1" ;;
+            (*.tar.gz) tar xvzf "$1" ;;
+            (*.bz2) bunzip2 "$1" ;;
+            (*.rar) rar x "$1" ;;
+            (*.cbr) rar x -ad "$1" ;;
+            (*.gz) gunzip "$1" ;;
+            (*.tar) tar xvf "$1" ;;
+            (*.cbt) tar xvf "$1" ;;
+            (*.tbz2) tar xvjf "$1" ;;
+            (*.tgz) tar xvzf "$1" ;;
+            (*.zip) unzip "$1" ;;
+            (*.cbz) unzip "$1" ;;
+            (*.Z) uncompress "$1" ;;
+            (*.7z) 7z x "$1" ;;
+            (*.cb7) 7z x "$1" ;;
+            (*.deb) ar vx "$1" ;;
+            (*) echo "Don't know how to extract $1" ;;
+        esac
+    else
+        echo "$1" "is not a valid file"
+    fi
+}
+
+# mpc
+get-mpc-title() {
+    mpc | head -1 | sed 's/.*\///g'
+}
+
+yt-all-subs() {
+    yt-dlp --write-subs --skip-download -- $(find -maxdepth 1 -type f| cut -d\[ -f2 | cut -d\] -f1 | sed 's/^\.\///g' | xargs)
+}
+
+bk() {
+    # bookmark a dir
+    cur_dir="$(pwd)"
+    echo "$@ ; ${cur_dir}" >> ${FILE_DIRS}
+}
+
+dirf() {
+    file="${XDG_DATA_HOME}/dirs"
+    chooser=fzf
+    # Read the file and extract descriptions
+    chosen=$(awk -F';' '{print $1}' "${file}" | $chooser --layout=reverse -i --height=10)
+
+    # Exit if none chosen.
+    [ -z "$chosen" ] && return 0
+
+    # Get the path associated with the selected description and remove leading/trailing whitespace
+    chosen=$(awk -v desc="${chosen}" -F';' '$1 == desc {print $2}' "${file}" | awk '{$1=$1};1')
+
+    # cd into dir
+    cd "${chosen}"
+}
+
+ff-merge() {
+    # merge mp4 and subtitle into an mkv
+    if [ $# -ne 2 ]; then
+      echo "Usage: ff-merge <mp4_file> <subtitle_file>"
+      return 1
+    fi
+
+    filename_base=${1%.*}
+    filename_mkv="${filename_base}.mkv"
+
+    # check file exists
+    if [ -f ${filename_mkv} ] ; then
+        echo "File ${filename_mkv} already exists. Exiting."
+        return 1
+    fi
+
+    ffmpeg -i $1 -i $2 -c:v copy -c:a copy "${filename_mkv}"
+}
+
+ff-mkvtomp4() {
+    ffmpeg -i "$1" -c:v copy -c:a copy "${1%.mkv}.mp4"
+}
+
+vopen() {
+    nfile=$(find . -maxdepth 1 -type f | fzf --height 16 --preview="bat --color=always {}")
+    [ -z ${nfile} ] && echo "No file selected" && return 0
+    echo ${nfile}
+    nvim ${nfile}
+}
+
+wopen() {
+    nfile=$(find ~/docs/wiki -type f | fzf --height 16 --preview="bat --color=always {}")
+    [ -z ${nfile} ] && echo "No file selected" && return 0
+    echo ${nfile}
+    nvim ${nfile}
+}
+
+get_mpd_home() {
+    cat ~/.config/mpd/mpd.conf  | grep music_directory | awk '{print $NF}' | sed 's/"//g'
+}
+
+get_mpc_path() {
+    d="$(get_mpd_home | sed 's/~/\/home\/skm/g')"
+    p="$(mpc current)"
+    printf '%q\n' "${d}"/"${p}"
+}
+
+ytextract() {
+    # extract yt tag from the last command in history
+    r 2>/dev/null | tail -1 | sed 's/.*\[//g;s/\].*//g;s/\\//g' | tail -1
+}
+
+moveold() {
+    # Check if the user provided a valid argument for days
+    if [ -z "$1" ]; then
+        echo "Usage: move_old_files <days>"
+        return 1
+    fi
+
+    # Check if the input is a number
+    if ! [[ "$1" =~ ^[0-9]+$ ]]; then
+        echo "Error: Please provide a valid number of days."
+        return 1
+    fi
+
+    # Check if the parent directory (..) is writable
+    if [ ! -w .. ]; then
+        echo "Error: Destination directory is not writable."
+        return 1
+    fi
+
+    # Find and move the files modified older than $1 days
+    find . -type f -mtime +$1 -exec mv -vi {} .. \;
+}
+
+
+movenew() {
+    # Check if the user provided a valid argument for days
+    if [ -z "$1" ]; then
+        echo "Usage: move_old_files <days>"
+        return 1
+    fi
+
+    # Check if the input is a number
+    if ! [[ "$1" =~ ^[0-9]+$ ]]; then
+        echo "Error: Please provide a valid number of days."
+        return 1
+    fi
+
+    # Check if the parent directory (..) is writable
+    if [ ! -w .. ]; then
+        echo "Error: Destination directory is not writable."
+        return 1
+    fi
+
+    # Find and move the files modified newer than $1 days
+    find . -type f -mtime -$1 -exec mv -vi {} .. \;
+}
+
+
+movebig() {
+    # Check if the user provided a valid argument for days
+    if [ -z "$1" ]; then
+        echo "Usage: move_old_files <days>"
+        return 1
+    fi
+
+    # Check if the input is a number
+    if ! [[ "$1" =~ ^[0-9]+$ ]]; then
+        echo "Error: Please provide a valid number of days."
+        return 1
+    fi
+
+    # Check if the parent directory (..) is writable
+    if [ ! -w .. ]; then
+        echo "Error: Destination directory is not writable."
+        return 1
+    fi
+
+    # Find and move the files bigger than $1M
+    find . -type f -size +${1}M -exec mv -vi {} .. \;
+}
+
+extract_last_bracket() {
+  # Extracts the content inside the last [...] pair from each line
+  if [ $# -gt 0 ]; then
+    cat "$@" | sed -E 's/.*\[([^]]*)\][^[]*$/\1/'
+  else
+    sed -E 's/.*\[([^]]*)\][^[]*$/\1/'
+  fi
+}
+
+yt-hang-sub() {
+    yt22 --write-subs --skip-download -- $(movehang | grep -v merged | extract_last_bracket | awk '!seen[$0]++' | xargs)
+}
+
+movetop() {
+    max=${1:-5}
+    for _ in $(seq $max) ; do
+        for f in $(llsr | grep "\[" | tail -1 | extract_last_bracket | sort | uniq | tail -10 | xargs) ; do mv ./*$f* .. ; done
+    done
+}
+
+source12() {
+    source ~/.local/share/venvs/venv312/bin/activate
+}
+
+rnd-kor() {
+    llm -t -m "openai/gpt-oss-120b" "Give me a random korean sentence and explain it. Use hangeul."
+}
+
+llm-comment() {
+    llm -s "Comment out this code." -t -m "openai/gpt-oss-120b" $@
+}

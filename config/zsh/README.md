@@ -2,36 +2,47 @@
 
 [Back to setup](../../README.md)
 
-| File | Location used by the configuration |
+| Package file | Destination |
 | --- | --- |
-| [env](env) | `~/.zshenv` |
-| [dot-zshrc](dot-zshrc) | `~/.config/zsh/.zshrc` |
-| [aliasrc](aliasrc) | `~/.config/aliasrc` |
-| [fnrc](fnrc) | `~/.config/fnrc` |
+| [.zshenv](.zshenv) | `~/.zshenv` |
+| [.config/env](.config/env) | `~/.config/env` |
+| [.config/aliasrc](.config/aliasrc) | `~/.config/aliasrc` |
+| [.config/fnrc](.config/fnrc) | `~/.config/fnrc` |
+| [.config/zsh/.zshrc](.config/zsh/.zshrc) | `~/.config/zsh/.zshrc` |
+| [.config/zsh/.zprofile](.config/zsh/.zprofile) | `~/.config/zsh/.zprofile` |
 
-`env` sets the XDG directories and `ZDOTDIR=$HOME/.config/zsh`.
-The startup file loads the environment, aliases, and functions from the
-locations above.
+`.zshenv` loads `~/.config/env`, which defines the XDG directories and sets
+`ZDOTDIR=$HOME/.config/zsh`. Interactive Zsh then loads the startup file, aliases,
+and functions. The `myVIMRC` variable points to the Lua Neovim configuration.
 
-## Use the configuration
+## Install
 
-Review the files and merge any existing configuration before linking them.
-Run these commands from the root of the `setup` checkout, using free destination
-paths:
+Install Zsh and GNU Stow, then run from the root of this checkout:
 
 ```sh
-SETUP_DIR="$PWD"
-mkdir -p "$HOME/.config/zsh" "$HOME/.cache/zsh"
-ln -s "$SETUP_DIR/config/zsh/env" "$HOME/.zshenv"
-ln -s "$SETUP_DIR/config/zsh/dot-zshrc" "$HOME/.config/zsh/.zshrc"
-ln -s "$SETUP_DIR/config/zsh/aliasrc" "$HOME/.config/aliasrc"
-ln -s "$SETUP_DIR/config/zsh/fnrc" "$HOME/.config/fnrc"
+./stow.sh --dry-run zsh
+./stow.sh zsh
 ```
 
-The configuration expects Zsh syntax highlighting at
-`/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh`.
-Several functions and bindings also use `fzf`, `lf`, Neovim, and other personal
-tools; consult the relevant file before using a binding.
+The helper also creates `~/.cache/zsh` for completion data after a successful
+installation. It creates no files during a dry run. Open a new Zsh session after
+installing the links. Selecting Zsh as your login shell is a separate step in
+the [post-install instructions](../../docs/post-install.md#shell).
 
-Start a new login session after linking the files. To expose selected utilities
-as commands, follow the [scripts instructions](../../scripts/README.md).
+Existing files and symlinks from the old dotfiles checkout are conflicts.
+Review and remove or relocate those target files before installing; preserve
+their source files. Refresh links with `./stow.sh --restow zsh`, or remove this
+checkout's links with `./stow.sh --delete zsh`.
+
+## Dependencies and personal files
+
+The startup file uses `fzf --zsh`, `fd`, and Zsh syntax highlighting. On Artix,
+install `fzf`, `fd`, and `zsh-syntax-highlighting`; the highlighting script is
+expected at `/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh`.
+See [fzf's shell integration](https://github.com/junegunn/fzf#setting-up-shell-integration)
+for versions that provide `fzf --zsh`.
+
+The environment loads `~/.local/share/secrets` only when that private file is
+readable. It is not part of this repository. Personal aliases and functions
+retain their existing paths and integrations, including desktop tools, `lf`,
+and external scripts. Review these when using a different machine.

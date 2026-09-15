@@ -1,0 +1,21 @@
+return {
+  -- "goolord/alpha-nvim",
+  -- event = "VimEnter",
+  -- config = function()
+  --   local alpha = require("alpha")
+  --   local dashboard = require("alpha.themes.dashboard")
+  --
+  --   dashboard.section.header.val = {
+  --     "line 1",
+  --     "line 1",
+  --     "line 1",
+  --     "line 1",
+  --   }
+  --
+  --   dashboard.section.buttons.val = {
+  --     dashboard.button("e", "e > new file", "<cmd>ene<CR>"),
+  --   }
+  -- alpha.setup(dashboard.opts)
+  -- vim.cmd([[autocmd FileType alpha setlocal nofoldenable]])
+  -- end
+}

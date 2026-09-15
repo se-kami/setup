@@ -1,0 +1,91 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import json
+import os
+import sys
+
+from openai import OpenAI
+from pydantic import BaseModel
+
+client = OpenAI(
+    base_url="https://api.groq.com/openai/v1", api_key=os.getenv("GROQ_API_KEY")
+)
+
+
+# ✅ Define strict schema
+class CodeResponse(BaseModel):
+    code: str
+
+
+def main(code: str):
+
+    response = client.beta.chat.completions.parse(
+        model="openai/gpt-oss-120b",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    """
+You are a senior developer.
+
+Your task:
+If the code is not written or contains TODO sections:
+1. Write the code with meaningful comments
+If necessary you are allowed to change the function arguments.
+
+If the code is already written, return the SAME code but improved with:
+1. Inline comments
+2. A PyTorch-style docstring with MODERN Python typing.
+3. Improved variable names.
+
+Docstring MUST follow EXACTLY this template:
+
+\"\"\"
+Short description.
+
+Args:
+    arg1 (type): description
+    arg2 (type): description
+
+Returns:
+    type: description
+\"\"\"
+
+Constraints:
+- Use MODERN Python typing, e.g., `a: int`, `b: list`
+- No markdown
+- No explanations
+- No extra text
+- Only valid Python code
+- Do not change behavior
+"""
+                ),
+            },
+            {
+                "role": "user",
+                "content": f"""
+Code:
+{code}
+""",
+            },
+        ],
+        response_format={
+            "type": "json_schema",
+            "json_schema": {
+                "name": "code_response",
+                "schema": CodeResponse.model_json_schema(),
+            },
+        },
+    )
+
+    raw_result = json.loads(response.choices[0].message.content or "{}")
+    parsed = CodeResponse.model_validate(raw_result)
+
+    return parsed.code.strip()
+
+
+if __name__ == "__main__":
+    code = sys.stdin.read()
+    output = main(code)
+    sys.stdout.write(output)

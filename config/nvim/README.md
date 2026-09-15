@@ -2,35 +2,51 @@
 
 [Back to setup](../../README.md)
 
-- [init.vim](init.vim): settings, mappings, and vim-plug declarations.
-- [filetype.vim](filetype.vim): filetype detection.
-- [snippets/](snippets/): UltiSnips snippets for general use, C, Python, and TeX.
+This package contains the current Lua configuration:
 
-## Use the configuration
+- [init.lua](.config/nvim/init.lua): entry point.
+- [lua/user/](.config/nvim/lua/user/): settings, mappings, and commands.
+- [lua/plugins/](.config/nvim/lua/plugins/): lazy.nvim bootstrap and plugin declarations.
+- [after/](.config/nvim/after/): filetype settings and LuaSnip snippets.
+- [plugins/](.config/nvim/plugins/): local plugins, including codebot and translatebot.
+- [lazy-lock.json](.config/nvim/lazy-lock.json): plugin versions from the working configuration.
 
-Install Neovim and vim-plug using the
-[editor setup instructions](../../docs/post-install.md#editor-and-plugins).
-Merge or relocate any existing configuration before creating links.
+## Install
 
-Run from the root of the `setup` checkout:
+Install Neovim, Git, and GNU Stow. Run from the root of this checkout:
 
 ```sh
-SETUP_DIR="$PWD"
-mkdir -p "$HOME/.config/nvim"
-ln -s "$SETUP_DIR/config/nvim/init.vim" "$HOME/.config/nvim/init.vim"
-ln -s "$SETUP_DIR/config/nvim/filetype.vim" "$HOME/.config/nvim/filetype.vim"
-ln -s "$SETUP_DIR/config/nvim/snippets" "$HOME/.config/nvim/my_snippets"
+./stow.sh --dry-run nvim
+./stow.sh nvim
 ```
 
-The snippet destination is `my_snippets` because that is the directory named in
-`g:UltiSnipsSnippetDirectories`. Link the individual files so downloaded plugins
-under `~/.config/nvim/plugged` stay outside this checkout.
+The package links into `~/.config/nvim`. Stow keeps directories real, so new
+runtime files stay in the target directory. The tracked `lazy-lock.json` is
+linked intentionally; changing plugin versions updates that file in the repo.
 
-Open Neovim and install the declared plugins:
+Open Neovim. The configuration bootstraps lazy.nvim when needed, which requires
+network access. Restore the recorded plugin versions with:
 
 ```vim
-:PlugInstall
+:Lazy restore
 ```
 
-The configuration includes LaTeX, Python, and external-tool integrations.
-Their dependencies depend on which features you use.
+Then run `:checkhealth` to check integrations. See the
+[lazy.nvim installation guide](https://lazy.folke.io/installation) for details.
+External dependencies vary by enabled feature: language servers, formatters,
+LaTeX tools, `ripgrep`, `fd`, and the tools used by the local plugins are separate
+installations. The codebot helper reads its API credential from the environment.
+
+## Moving from an older configuration
+
+This package uses `init.lua`, lazy.nvim, and LuaSnip. The earlier setup snapshot
+used `init.vim`, vim-plug, and UltiSnips. Move the old `init.vim` and its companion
+links out of the target before installing; Neovim must not have both entry files.
+
+If another dotfiles checkout owns your current links, review those links and
+remove or relocate them before running Stow here. Keep the old source files until
+you have verified the new setup. Avoid `stow --adopt`, which moves target files
+into the repository.
+
+Refresh after pulling changes with `./stow.sh --restow nvim`, or remove this
+checkout's links with `./stow.sh --delete nvim`.
