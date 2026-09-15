@@ -76,6 +76,6 @@ working dotfiles, replacing the older configuration snapshots.
 
 | Original repository | Current location |
 | --- | --- |
-| [artix-install](https://github.com/se-kami/artix-install) | [Installation](docs/artix-install.md) and [post-install](docs/post-install.md) |
-| [shell-utils](https://github.com/se-kami/shell-utils) | [Zsh](config/zsh/) and [scripts](scripts/) |
-| [nvim](https://github.com/se-kami/nvim) | [config/nvim/](config/nvim/) |
+| `artix-install` | [Installation](docs/artix-install.md) and [post-install](docs/post-install.md) |
+| `shell-utils` | [Zsh](config/zsh/) and [scripts](scripts/) |
+| `nvim` | [config/nvim/](config/nvim/) |
