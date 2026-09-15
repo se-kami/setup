@@ -1,0 +1,43 @@
+snippet time "time"
+`date +%H:%M`
+endsnippet
+
+snippet today "Date"
+`date +%F`
+endsnippet
+
+snippet pwd "pwd"
+`pwd`
+endsnippet
+
+snippet fname "file name"
+`!p snip.rv = fn`
+endsnippet
+
+snippet ffname "full file name"
+`pwd`/`!p snip.rv = fn`
+endsnippet
+
+snippet box "Box"
+`!p snip.rv = '┌' + '─' * (len(t[1]) + 2) + '┐'`
+│ $1 │
+`!p snip.rv = '└' + '─' * (len(t[1]) + 2) + '┘'`
+$0
+endsnippet
+
+snippet snip "snippets"
+snippet $1 "$2"
+$3
+\endsnippet
+endsnippet
+
+snippet arr "arrow"
+---> $1
+endsnippet
+
+snippet begpy "begpy"
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+
+endsnippet
