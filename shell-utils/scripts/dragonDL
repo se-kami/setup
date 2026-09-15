@@ -1,0 +1,6 @@
+#!/usr/bin/sh
+# drag and drop download tool
+dragon-drag-and-drop --target | while read url
+do
+    wget "$url"
+done

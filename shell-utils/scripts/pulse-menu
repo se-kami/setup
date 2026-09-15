@@ -1,0 +1,8 @@
+#!/usr/bin/sh
+
+mode=$(printf "normal\ntalk" | dmenu -c)
+
+case $mode in
+    normal) pactl set-card-profile bluez_card.00_18_09_65_D2_E3 a2dp_sink && notify-send "🎧 normal" ;;
+    talk) pactl set-card-profile bluez_card.00_18_09_65_D2_E3 handsfree_head_unit && notify-send "🎧🎤";;
+esac

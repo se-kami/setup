@@ -1,0 +1,170 @@
+# load zshenv
+if [ -f $HOME/.zshenv ]; then
+    source $HOME/.zshenv
+fi
+# load aliases
+if [ -f $HOME/.config/aliasrc ]; then
+    source $HOME/.config/aliasrc
+fi
+# load functions
+if [ -f $HOME/.config/fnrc ]; then
+    source $HOME/.config/fnrc
+fi
+export EDITOR=nvim
+export myVIMRC="$XDG_CONFIG_HOME/nvim/init.vim"
+# BASIC
+unsetopt beep # BEEP
+setopt autocd # auto cd into typed directory
+bindkey -v # vim bindings
+stty stop undef		# Disable ctrl-s to freeze terminal.
+setopt interactive_comments # comments
+# completions
+autoload -Uz compinit && compinit
+compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION
+
+zstyle ':completion:*:*:*:*:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*' # case insensitive
+zstyle ':completion:*' list-colors ''
+# zstyle ':completion:*' special-dirs true # Complete . and .. special directories
+_comp_options+=(globdots)		# Include hidden files
+# completion menu
+zmodload zsh/complist
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'j' vi-down-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect '^xi' vi-insert
+# prompt
+autoload -U colors && colors	# Load colors
+
+# Load version control information
+autoload -Uz vcs_info
+precmd() { vcs_info }
+precmd_functions+=( precmd_vcs_info )
+setopt prompt_subst
+# Format the vcs_info_msg_0_ variable
+zstyle ':vcs_info:git:*' formats 'on branch %b'
+RPROMPT="%B%F{100}\$vcs_info_msg_0_%b%f"
+
+if [ $HOME = "/root" ] ; then
+    # "%B%F{1}%n %b%# %~ $%f "
+    export PS1="%B%F{1}%~
+%n %b%# $%f "
+else
+    # "%B%F{209}%n %b%# %~ $%f "
+    export PS1="%B%F{209}%~
+%n %b%#%f "
+fi
+# history
+HISTFILE=~/.config/histfile
+HISTSIZE=10000000
+SAVEHIST=10000000
+# history records date
+export HISTTIMEFORMAT="%h/%d - %H:%M:%S "
+# history ignore
+export HISTIGNORE="[  ]*"
+setopt appendhistory
+setopt INC_APPEND_HISTORY           # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY                # Share history between all sessions.
+# cursor
+cursor_mode() {
+    cursor_block='\e[2 q'
+    cursor_beam='\e[6 q'
+
+    function zle-keymap-select {
+        if [[ ${KEYMAP} == vicmd ]] ||
+            [[ $1 = 'block' ]]; then
+            echo -ne $cursor_block
+        elif [[ ${KEYMAP} == main ]] ||
+            [[ ${KEYMAP} == viins ]] ||
+            [[ ${KEYMAP} = '' ]] ||
+            [[ $1 = 'beam' ]]; then
+            echo -ne $cursor_beam
+        fi
+    }
+
+    zle-line-init() {
+        echo -ne $cursor_beam
+    }
+
+    zle -N zle-keymap-select
+    zle -N zle-line-init
+}
+
+cursor_mode
+# KEYS
+# Del key
+bindkey    "^[[3~"          delete-char
+bindkey    "^[3;5~"         delete-char
+bindkey     "\e[3~"         delete-char
+# backspace key
+bindkey "\177" backward-delete-char
+bindkey "\033\177" backward-delete-word
+# moving around
+# ctrl-left and ctrl-right
+bindkey "\e[1;5D" backward-word
+bindkey "\e[1;5C" forward-word
+# ctrl-shift + {left/right}
+bindkey "\e[1;6D" vi-backward-word-end
+bindkey "\e[1;6C" forward-word
+# ctrl-bs and ctrl-del
+bindkey "\e[3;5~" kill-word
+bindkey "\e[M" kill-word
+bindkey "\C-_" backward-kill-word
+# repeat command
+bindkey -s '\e1' "!:0 \t" # repeats last command
+bindkey -s '\e2' "!:0-1 \t" # repeats last command and first argument
+bindkey -s '\e3' "!:0-2 \t"
+bindkey -s '\e4' "!:0-3 \t"
+bindkey -s '\e5' "!:0-4 \t"
+bindkey -s '\e6' "!:0-5 \t"
+# less
+export LESS_TERMCAP_mb=$'\e[1;32m'
+export LESS_TERMCAP_md=$'\e[1;32m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[01;33m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[1;4;31m'
+# ranger
+# so ranger inside shell inside ranger is solved
+ranger() {
+    if [ -z "$RANGER_LEVEL" ]; then
+        /usr/bin/ranger "$@"
+    else
+        exit
+    fi
+}
+# CUSTOM KEYS
+# use lf to cd {{{
+lfcd () {
+    tmp="$(mktemp)"
+    lf -last-dir-path="$tmp" "$@"
+    if [ -f "$tmp" ]; then
+        dir="$(cat "$tmp")"
+        rm -f "$tmp" >/dev/null
+        [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
+    fi
+}
+bindkey -s '^o' 'lfcd\n'
+# Make ^Z toggle between ^Z and fg {{{
+function ctrlz() {
+if [[ $#BUFFER == 0 ]]; then
+    fg >/dev/null 2>&1 && zle redisplay
+else
+    zle push-input
+fi
+}
+
+zle -N ctrlz
+bindkey '^Z' ctrlz
+bindkey -s '^x' "\eIxopen # ^M" # clear line and xopen
+bindkey -s '^w' "\eIviwi # ^M" # clear line and vimwiki
+bindkey -s '^f' "\eIfopen # ^M" # clear line and cd into dir
+bindkey -s '^v' "\eIvopen # ^M" # open in vim
+
+# PATH
+export PATH;
+typeset -U PATH path
+fpath=($$XDG_CONFIG_HOME/zsh/plugins/zsh-completions/src $fpath)
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

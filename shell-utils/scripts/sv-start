@@ -1,0 +1,3 @@
+#!/usr/bin/sh
+
+sudo sv start "$(ls /run/runit/service/ | fzf)"

@@ -1,0 +1,4 @@
+#!/usr/bin/zsh
+
+cmd="surf -pe 1>/dev/null 2>/dev/null &!"
+tabbed surf -pe 1>/dev/null 2>/dev/null &!

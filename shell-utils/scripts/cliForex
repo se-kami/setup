@@ -1,0 +1,47 @@
+#!/usr/bin/sh
+
+# 1 first argument currency -> 2nd argument currency
+
+if [ -z "$1" ] ; then
+    echo "No arguments"
+    exit
+fi
+
+
+cur1=$1
+
+if [ -z "$1" ] ; then
+    cur2="usd"
+else
+    cur2=$2
+fi
+
+if [ -z "$3" ] ; then
+    amount=1
+else
+    amount=$3
+fi
+
+today=$(date '+%Y-%m-%d')
+weekMinus1=$(date -d -7day '+%Y-%m-%d')
+weekMinus2=$(date -d -14day '+%Y-%m-%d')
+weekMinus3=$(date -d -21day '+%Y-%m-%d')
+weekMinus4=$(date -d -28day '+%Y-%m-%d')
+amountLatest=$(curl -s  https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/${1}.json | jq ".$1.$2")
+echo 1 $1 = $amountLatest $2
+amount=$(curl -s  https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/$weekMinus1/currencies/${1}.json | jq ".$1.$2")
+echo
+echo 1 week ago
+echo 1 $1 = $amount $2
+amount=$(curl -s  https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/$weekMinus2/currencies/${1}.json | jq ".$1.$2")
+echo
+echo 2 weeks ago
+echo 1 $1 = $amount $2
+amount=$(curl -s  https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/$weekMinus3/currencies/${1}.json | jq ".$1.$2")
+echo
+echo 3 weeks ago
+echo 1 $1 = $amount $2
+amount=$(curl -s  https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/$weekMinus4/currencies/${1}.json | jq ".$1.$2")
+echo
+echo 4 weeks ago
+echo 1 $1 = $amount $2

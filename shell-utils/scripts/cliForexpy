@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+import requests
+from diagram import DGWrapper
+from diagram import DOption
+from diagram import Point
+from datetime import date, timedelta
+
+"""
+diagram
+https://github.com/tehmaze/diagram/blob/master/diagram.py
+"""
+
+def getPrice(date='latest', curIN='USD', curOUT='EUR'):
+    """
+    https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/<<YYYY-MM-DD>>/currencies/<<CURIN>>.json | jq ".$1.$2")
+    """
+    curIN = curIN.lower()
+    curOUT = curOUT.lower()
+    url = f'https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/{date}/currencies/{curIN}.json'
+    r = requests.get(url)
+    data = r.json()
+    return data[f'{curIN}'][f'{curOUT}']
+
+def getDate(minus):
+    prevDate = date.today() - timedelta(days=minus)
+    return prevDate.strftime('%Y-%m-%d')
+
+def draw(data):
+    options = DOption()
+    # options.width = 0
+    # options.height = 0
+    # options.reverse = False
+    # options.function = None
+    # options.batch = False
+    # options.legend = False
+    # options.encoding = ''
+    # options.color = True
+    # options.palette = 'default'
+    # options.size = Point([options.width, options.height])
+    options.mode = None  # 'v'
+    # options.axis = False
+    # options.keys = False
+    gram = DGWrapper(data=data, dg_option=options)
+    gram.show()
+
+
+def main():
+    points = []
+    values = []
+    curIN='eur'
+    curOUT='rub'
+    for i in range(50):
+        points.append(-i*7-1)
+        date = getDate(i*7+1)
+        values.append(getPrice(date=date, curIN=curIN, curOUT=curOUT))
+    points = points[::-1]
+    values = values[::-1]
+    data = [values, points]
+    draw(data)
+
+
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,191 @@
+alias emacs='nvim'
+alias startx='cd && startx "$XDG_CONFIG_HOME/X11/xinitrc" -- "$XDG_CONFIG_HOME/X11/xserverrc" vt1'
+alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
+alias asyfixed='asy -epsdriver=ps2write -maxtile "(256, 256)"'
+alias duhs='du -h --summarize'
+alias duds='find -maxdepth 1 -type d -exec du -hs {} \;'
+alias dfh='df -h'
+
+# basic things
+alias rmdir='rmdir -v'
+alias mkdir='mkdir -pv'
+alias mv='mv -vi'
+alias cp='cp -riv'
+alias rm='rm -vi'
+alias diff='diff --color'
+
+# FZF
+alias fzfse='fzf --bind "enter:execute(xdg-open {})"' # fzf and execute, but doesnt quit fzf
+alias fzfex='fzf | xargs -r -i xdg-open "{}"' # fzf and execute, exit fzf
+alias fzfde='fzf | xargs -r -i zsh -c "xdg-open \"{}\" &!"' # fzf and execute, exit fzf
+
+# alias mountC='sudo mount -t ntfs -o rw,auto,user,fmask=0022,dmask=0000 /dev/sda3 /mnt/diskC'
+# alias mountD='sudo mount -t ntfs -o rw,auto,user,fmask=0022,dmask=0000 /dev/sda4 ~/data'
+
+alias ls='ls -bhF --color=auto --group-directories-first'
+alias dir='dir --color'
+alias vdir='vdir --color'
+alias la='ls -bA'
+alias ll='ls -lbh'
+alias lla='ll -Ab'
+alias lc='ls -Cb'
+alias lst='ls --sort=time'
+alias lstr='ls --sort=time --reverse'
+alias llt='ls -lb --sort=time'
+alias lltr='ls -lb --sort=time --reverse'
+alias lss='ls --sort=size'
+alias lssr='ls --sort=size --reverse'
+alias lls='ls -sb --sort=size'
+alias llsr='ls -sb --sort=size --reverse'
+alias ln='ln -iv'
+alias lshuf='\ls --color | shuf | head'
+
+alias vi='nvim'
+alias grep='grep --color'
+alias egrep='egrep --color'
+alias fgrep='fgrep --color'
+alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
+alias countItems='ls | wc -l'
+
+# CD
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias cddoc='cd ~/Documents'
+alias cddow='cd ~/Downloads'
+alias cdpic='cd ~/Pictures'
+
+# VI
+alias vizsh='nvim ~/.config/zsh/.zshrc'
+alias vivi='nvim ~/.config/nvim/init.vim'
+alias vinews='nvim ~/.config/newsboat/urls'
+alias visxhk='nvim ~/.config/sxhkd/sxhkdrc'
+alias vialias='nvim ~/.config/aliasrc'
+alias vifn='nvim ~/.config/fnrc'
+alias vihist='nvim ~/.config/histfile'
+alias vimark='nvim ~/code/scripts/bookmarks_scs/bookmarks'
+alias vopen='nvim "$(find . -maxdepth 1 -type f | fzf --height 8)"'
+
+
+# YT
+alias youtube-dl="yt-dlp"
+alias ytfk='youtube-dl --format "bestvideo+bestaudio[ext=m4a]/bestvideo+bestaudio/best" -o "~/figureSkating/unsorted/z/%(title)s.%(ext)s" '
+alias ytzkr='youtube-dl --extract-audio --audio-format mp3 -o "~/Music/zika/rus/unsorted/%(title)s.%(ext)s" '
+alias ytzkc='youtube-dl --extract-audio --audio-format mp3 -o "~/Music/zika/good/unsorted/%(title)s.%(ext)s" '
+alias ytzkg='youtube-dl --extract-audio --audio-format mp3 -o "~/Music/zika/old/unsorted/%(title)s.%(ext)s" '
+alias ytsp='youtube-dl --format "bestvideo+bestaudio[ext=m4a]/bestvideo+bestaudio/best" -o "~/media/sport/%(title)s.%(ext)s" '
+alias ytvid='youtube-dl --format "bestvideo+bestaudio[ext=m4a]/bestvideo+bestaudio/best" '
+alias ytvid4='youtube-dl --format "bestvideo+bestaudio[ext=m4a]/bestvideo+bestaudio/best" --merge-output-format mp4 '
+alias yta="youtube-dl -x -f bestaudio/best"
+alias yta3="youtube-dl --extract-audio --audio-format mp3"
+alias ytchn="youtube-dl --skip-download --get-id --get-title"
+alias ytdesc="youtube-dl --skip-download --get-description"
+alias yttitle="youtube-dl --skip-download --get-title"
+alias ytlist="youtube-dl --list-formats"
+alias yt22="yt-dlp -f 22/18/bestvideo+bestaudio"
+alias ytworst="yt-dlp -f worst"
+
+
+# GIT
+alias gitpushu='git push -u origin master'
+alias gitgraph=" git log --graph --all --oneline"
+alias gs='git status'
+alias gp='git push'
+alias gc='git commit'
+alias gcm='git commit -m'
+alias gcam='git commit -am'
+
+
+# TMUX
+alias devtmux="tmux new-session \; \
+  split-window -v -p 25 \; \
+  split-window -h -p 30 \; \
+  select-pane -t 0 \;"
+
+# GPU
+alias usegpu="DRI_PRIME=1"
+
+# PING
+alias ping1='ping 1.1.1.1'
+alias ping0='ping 1.0.0.1'
+
+# DWMBLOCKS
+alias blocksreset='pkill dwmblocks; dwmblocks &!'
+
+# newsboat
+alias newz='newsboat'
+alias newzr='newsboat -x reload'
+alias newzu='newsboat -x print-unread'
+
+# ps
+alias psuserm='ps -u $USER -o pid,%mem,%cpu,comm | sort -b -k2 -r'
+alias psuserc='ps -u $USER -o pid,%mem,%cpu,comm | sort -b -k3 -r'
+
+# history
+alias histfzfu='history -20000 | cut -c 8- | sort | uniq | fzf --height=10 | tr -d "\n"'
+alias histfzf='history -20000 | cut -c 8- | tac | fzf +s --height=15 | tr -d "\n"'
+
+# random file
+alias randomfile='\ls -A | shuf | head -1'
+alias rf=randomfile
+alias rff='find . -type f | shuf | head -1'
+
+# keyboard
+alias typegood='setxkbmap -layout us,ru,hu,hr -option grp:alt_shift_toggle -option caps:swapescape &'
+
+# ytfzf
+alias ytf='ytfzf -t -l -f'
+
+# rsync
+alias cpr='rsync -avc --progress'
+
+# chmod
+alias chmodx='chmod +x'
+
+# zathura
+alias zat='zathura'
+
+# matrix
+alias matDec='matrix_decrypt'
+
+# perl
+alias perlRemoveEOF="perl -pi -e 'chomp if eof'"
+
+# get default permissions
+alias setDefaultPermissions='(find -type d -exec chmod 755 {} \;) && (find -type f -exec chmod 644 {} \;)'
+
+# get invidious instances
+alias getINV1='curl -s "https://redirect.invidious.io/" | grep "Available instances" | sed "s/a href=\"/\n/g;s/\">/\n/g" | grep https | head -10 | paste -s -d ","'
+alias getINV2='curl -s "https://api.invidious.io/?sort_by=health" | pup | grep -v "github.com" | grep "href=\"https" | sed "s/\s*<a href=\"//g" | sed "s/\">//g" | head -8 | paste -s -d ","'
+
+# folder open
+alias fopen='cd "$(dirname "$(fzf)")"'
+
+# yarn
+alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
+
+# python
+alias jupy9='python3.9 -m jupyter notebook --no-browser'
+alias jupy10='python -m jupyter notebook --no-browser'
+
+# pactl
+alias audio-normal='pactl set-card-profile bluez_card.00_18_09_65_D2_E3 a2dp_sink'
+alias audio-talk='pactl set-card-profile bluez_card.00_18_09_65_D2_E3 handsfree_head_unit'
+
+# files
+alias -s {txt,py,c,cpp,md,tex}=vi
+alias -s {png,jpg,jpeg}=nsxiv
+alias -s {mp4,mkv,gif}=mkv
+alias -s {pdf,epub}=zathura
+
+# images
+alias sxiv=nsxiv
+alias svi=nsxiv
+
+# get ip
+alias getBeastIP='gpg --decrypt ~/code/git/publicIP/a.txt.gpg | tail -1'
+
+# cuda
+alias blockCUDA='export CUDA_VISIBLE_DEVICES=""'
+
+# sync
+alias watch_sync='watch -d grep -e Dirty: -e Writeback: /proc/meminfo'

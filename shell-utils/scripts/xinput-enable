@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+xinput --enable "$(xinput list | fzf | sed -E 's/.*=([0-9]*).*/\1/g')"

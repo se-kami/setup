@@ -1,0 +1,2 @@
+#!/usr/bin/sh
+echo $(xdg-mime query filetype "$@" | xargs -I {} xdg-mime query default {})

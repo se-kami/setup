@@ -1,0 +1,15 @@
+#!/usr/bin/sh
+
+for f in $(ls /run/runit/service/) ; do
+    status="$(sudo sv status $f | cut -d: -f1)"
+    if [ $status = "run" ] ; then
+        printf "%-50s %s" "$f "
+        printf "$(tput setaf 4)${status}$(tput sgr0)\n"
+    elif [ $status = "down" ] ; then
+        printf "%-59s %s" "$(tput setaf 1)${f}$(tput sgr0)"
+        printf "$(tput setaf 1)${status}$(tput sgr0)\n"
+    else
+        printf "%-50s %s" "$f "
+        printf "$(tput setaf 1)${status}$(tput sgr0)\n"
+    fi
+done

@@ -1,0 +1,130 @@
+#!/bin/sh
+
+# Adds `~/.local/bin` to $PATH
+# export PATH="$PATH:$(du "$HOME/.local/bin" | cut -f2 | paste -sd ':' -)"
+# unsetopt PROMPT_SP
+
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LC_CTYPE=UTF-8
+
+export EDITOR="nvim"
+export TERMINAL="st"
+[ $DISPLAY ] && export BROWSER=librewolf || export BROWSER=w3m
+
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
+# zsh
+export ZDOTDIR=$HOME/.config/zsh
+export HISTFILE="$XDG_DATA_HOME"/zsh/history
+
+### CLEANUP
+#adb, .android
+export ANDROID_SDK_HOME="$XDG_CONFIG_HOME"/android
+export ANDROID_AVD_HOME="$XDG_DATA_HOME"/android/
+export ANDROID_EMULATOR_HOME="$XDG_DATA_HOME"/android/
+export ADB_VENDOR_KEY="$XDG_CONFIG_HOME"/android
+export ANDROID_HOME="$XDG_DATA_HOME"/android
+
+
+# cargo, rust-cargo
+export CARGO_HOME="$XDG_DATA_HOME"/cargo
+
+# go
+export GOPATH="$XDG_DATA_HOME"/go
+
+# ipython
+export IPYTHONDIR="$XDG_CONFIG_HOME"/jupyter
+export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME"/jupyter
+
+# java
+export _JAVA_OPTIONS=-Djava.util.prefs.userRoot="$XDG_CONFIG_HOME"/java
+
+# npm
+export NPM_CONFIG_USERCONFIG=$XDG_CONFIG_HOME/npm/npmrc
+
+# pass
+export PASSWORD_STORE_DIR="$XDG_DATA_HOME"/pass
+
+# tex
+export TEXMFHOME=$XDG_DATA_HOME/texmf
+export TEXMFVAR=$XDG_CACHE_HOME/texlive/texmf-var
+export TEXMFCONFIG=$XDG_CONFIG_HOME/texlive/texmf-config
+
+# weechat
+export WEECHAT_HOME="$XDG_CONFIG_HOME"/weechat
+
+# gtk
+export GTK2_RC_FILES="$XDG_CONFIG_HOME"/gtk-2.0/gtkrc
+
+# bash
+# export HISTFILE="$XDG_DATA_HOME/bash/history"
+
+# libice
+export ICEAUTHORITY="$XDG_CACHE_HOME/ICEauthority"
+
+# less
+export LESSKEY="$XDG_CONFIG_HOME/less/lesskey"
+export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
+# export LESSHISTFILE=-
+
+# sqlite
+export SQLITE_HISTORY=$XDG_DATA_HOME/sqlite_history
+
+# vim
+# export VIMINIT='if !has("nvim") | source "$XDG_CONFIG_HOME/vim/vimrc" | endif'
+# export VIMINIT="if has("nvim") | so ${XDG_CONFIG_HOME:-$HOME/.config}/nvim/init.vim | else | set nocp | so ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc | endif"
+export VIMWIKIHOME="$HOME/Documents/vimwiki"
+
+# xinit
+export XINITRC="$XDG_CONFIG_HOME"/X11/xinitrc
+export XSERVERRC="$XDG_CONFIG_HOME"/X11/xserverrc
+
+# xorg-xauth
+export XAUTHORITY="$XDG_CONFIG_HOME"/X11/Xauthority
+
+# wget
+export WGETRC="$XDG_CONFIG_HOME/wgetrc"
+
+# aspell
+export ASPELL_CONF="per-conf $XDG_CONFIG_HOME/aspell/aspell.conf; personal $XDG_CONFIG_HOME/aspell/en.pws; repl $XDG_CONFIG_HOME/aspell/en.prepl"
+
+# gnupg
+# export GNUPGHOME="${XDG_CONFIG_HOME}"/gnupg
+export GNUPGHOME="${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
+
+# python
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/pystartupfile.py"
+export PYTHONHISTFILE="$XDG_CONFIG_HOME/python/python_history"
+
+# notmuch
+export NOTMUCH_CONFIG="$XDG_CONFIG_HOME"/notmuch/notmuchrc
+export NMBGIT="$XDG_DATA_HOME"/notmuch/nmbug
+
+# kaggle
+export KAGGLE_CONFIG_DIR="$XDG_CONFIG_HOME/kaggle"
+
+# aspell
+export ASPELL_CONF="per-conf $XDG_CONFIG_HOME/aspell/aspell.conf; personal $XDG_CONFIG_HOME/aspell/en.pws; repl $XDG_CONFIG_HOME/aspell/en.prepl"
+
+# docker
+export DOCKER_BUILDKIT=1
+export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
+
+# CUDA
+export CUDA_CACHE_PATH="$XDG_CACHE_HOME"/nv
+
+# FZF
+# export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+
+# DIFFPROG
+export DIFFPROG='nvid -d'
+
+# NVM
+export NVM_DIR="$XDG_DATA_HOME"/nvm
+
+# INPUTRC
+export INPUTRC="$XDG_CONFIG_HOME"/readline/inputrc

@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+# shutdown but check if vim is open
+
+echo "Checking for opened vim"
+if [ $(pgrep nvim | wc -l) -gt 0 ] ; then
+    echo "vim is open somewhere"
+else
+    echo "No opened vim instances found"
+    echo "Turning off"
+    sudo poweroff
+fi

@@ -1,0 +1,5 @@
+#!/usr/bin/sh
+
+ans=$(ping -c 4 -w 1 1.1.1.1 | grep packet | awk '{print $6}')
+
+echo $ans

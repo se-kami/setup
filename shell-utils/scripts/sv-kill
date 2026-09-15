@@ -1,0 +1,3 @@
+#!/usr/bin/sh
+
+sudo sv kill "$(ls /run/runit/service/ | fzf)"

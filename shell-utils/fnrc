@@ -1,0 +1,184 @@
+## functions to source in zsh
+
+mcd() {
+    mkdir -pv "$1"
+    cd "$1"
+}
+
+xopen() {
+    # xdg-open "$(find -type f | fzf | tee)" 1>/dev/null 2>/dev/null
+    xfile=${"$(find -maxdepth 1 -type f | fzf | tee)":2}
+    echo $xfile
+    xdg-open "$xfile" 1>/dev/null 2>/dev/null
+}
+
+ytyta() {
+    youtube-dlc -x -f bestaudio/best $1
+}
+
+ytytv() {
+    youtube-dlc --add-metadata --format "bestvideo+bestaudio[ext=m4a]/bestvideo+bestaudio/best" $1
+}
+
+fcd() {
+    cd "$(find -type d | fzf --height=10)"
+}
+
+gitcommsg() {
+    msg="$@"
+    git commit -m "$msg"
+}
+
+clipcopy() {
+    cat - | xclip -selection c
+}
+
+mpvyt() {
+    mpv "https://www.youtube.com/watch?v=$1"
+}
+
+wttrin() {
+    place=$(echo $@ | sed 's/\ /%20/g')
+    curl -s wttr.in/$place
+}
+
+untag() {
+    for f in $@; do
+        ffmpeg -i "$f" -map_metadata -1 "2.$f"
+    done
+}
+
+tomobi() {
+    for f in $@; do
+        ebook-convert $f .mobi
+    done
+}
+
+topdf() {
+    for f in $@; do
+        ebook-convert $f .pdf
+    done
+}
+
+timeNotify() {
+    date
+    echo "to wait: $1"
+    sleep $1 && notify-send $2
+}
+
+ccompile() {
+    name=$(echo "$1" | sed -e 's/\.[^.]*$//')
+    gcc $1 -o "$name.out"
+}
+
+Run() {
+    eval "./$1"
+}
+
+meddur() {
+    mediainfo $1 | grep "Duration" | head -1 | awk '{print $3 $4 " " $5 $6}'
+}
+
+cd_with_fzf() {
+    cd $HOME && cd "$(fd -t d | fzf --preview="tree -L 1 {}" --bind="space:toggle-preview" --preview-window=:hidden)" && echo "$PWD" && tree -L 2
+}
+
+open_with_fzf() {
+    fd -t f -H -I | fzf -m --preview="xdg-mime query default {}" | xargs - ro -d "\n" xdg-open 2>&-
+}
+
+ffcut() {
+    ffmpeg -i "$1" -ss "$2" -to "$3" "$4"
+}
+
+chr() {
+    python -c "print(chr(int(\"$1\")))"
+}
+
+ord() {
+    python -c "print(ord(\"$1\"))"
+}
+
+# Shows arch packages in a nice window with fzf
+pacman-info() {
+    pacman -Slq | fzf --multi --preview 'pacman -Si {1}' | xargs -ro sudo pacman -S
+}
+
+# Shows aur packages in a nice window with fzf
+yay-info() {
+    yay -Slq | fzf -m --preview 'cat <(yay -Si {1}) <(yay -Fl {1} | awk "{print \$2}")' | xargs -ro yay -S
+}
+
+cheat() {
+    curl cheat.sh/"$1"
+}
+
+upload0() {
+    curl -F "file=@$1" https://0x0.st/
+}
+
+# Change and list directory
+cdl() { cd "$1" && ls }
+
+# Make directory and change into it
+mkcdir() { mkdir "$@"; if [ "$1" = "-p" ]; then cd "$2"; else cd "$1"; fi }
+
+# Edit /etc/hosts
+hosts() { if [ `id -u` = 0  ]; then $EDITOR /etc/hosts ; else sudo $EDITOR /etc/hosts; fi }
+
+# Get PTR record from domain
+ptr() { IP=`dig +short A $1`; dig +short -x $IP }
+
+# Prevent ranger nesting
+ranger() { if [ -z "$RANGER_LEVEL" ]; then /usr/bin/ranger "$@"; else exit; fi }
+
+# search newsboat cache
+newzgrep() { grep --binary-files=text "$1" $XDG_DATA_HOME/newsboat/cache.db }
+
+# kill -9
+auxkill() {
+    procid="$(ps aux | fzf | awk '{print $2}')"
+    echo $procid | xclip -selection c
+    ps aux | grep $procid
+}
+
+# get first item in array
+find_alt() {
+# usage find_alt prog1 prog2 prog3 ---> if only prog2 is installed, returns prog2
+    for i ; do which "$i" > /dev/null && {echo "$i" ; return 0;} ; done ; return 1;
+}
+
+extract() {
+    if [ -f $1 ] ; then
+        case "$1" in
+            (*.tar.bz2) tar xvjf "$1" ;;
+            (*.tar.gz) tar xvzf "$1" ;;
+            (*.bz2) bunzip2 "$1" ;;
+            (*.rar) rar x "$1" ;;
+            (*.cbr) rar x -ad "$1" ;;
+            (*.gz) gunzip "$1" ;;
+            (*.tar) tar xvf "$1" ;;
+            (*.cbt) tar xvf "$1" ;;
+            (*.tbz2) tar xvjf "$1" ;;
+            (*.tgz) tar xvzf "$1" ;;
+            (*.zip) unzip "$1" ;;
+            (*.cbz) unzip "$1" ;;
+            (*.Z) uncompress "$1" ;;
+            (*.7z) 7z x "$1" ;;
+            (*.cb7) 7z x "$1" ;;
+            (*.deb) ar vx "$1" ;;
+            (*) echo "Don't know how to extract $1" ;;
+        esac
+    else
+        echo "$1" "is not a valid file"
+    fi
+}
+
+# mpc
+get-mpc-title() {
+    mpc | head -1 | sed 's/.*\///g'
+}
+
+yt-all-subs() {
+    yt-dlp --write-subs --skip-download -- $(ls . | cut -d\[ -f2 | cut -d\] -f1 | xargs)
+}

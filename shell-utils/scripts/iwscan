@@ -1,0 +1,6 @@
+#!/usr/bin/sh
+
+dev=$(iwctl device list | tail -2 | head -1 | awk '{print $1}')
+iwctl station $dev scan
+sleep 2
+iwctl station $dev get-networks
