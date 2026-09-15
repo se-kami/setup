@@ -48,7 +48,6 @@ personal configs, including machine-specific aliases and tools.
 | [config/zsh/](config/zsh/) | Stow package for Zsh, environment, aliases, and functions |
 | [config/nvim/](config/nvim/) | Stow package for Neovim, plugins, and snippets |
 | [scripts/](scripts/) | General utilities, with runit, network, media, and desktop groups |
-| [tests/](tests/) | Stow installation, conflict, refresh, and removal checks |
 
 Each package mirrors paths relative to `$HOME`. For example,
 `config/nvim/.config/nvim/init.lua` becomes `~/.config/nvim/init.lua`.
@@ -80,14 +79,3 @@ working dotfiles, replacing the older configuration snapshots.
 | [artix-install](https://github.com/se-kami/artix-install) | [Installation](docs/artix-install.md) and [post-install](docs/post-install.md) |
 | [shell-utils](https://github.com/se-kami/shell-utils) | [Zsh](config/zsh/) and [scripts](scripts/) |
 | [nvim](https://github.com/se-kami/nvim) | [config/nvim/](config/nvim/) |
-
-## Verify
-
-With GNU Stow installed:
-
-```sh
-python3 -m unittest discover -s tests -v
-```
-
-Tests use temporary target directories and do not install anything into your
-real home directory.
