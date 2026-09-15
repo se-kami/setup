@@ -161,6 +161,7 @@ yay -S git zathura zathura-djvu zathura-ps zathura-pdf-mupdf mpd mpv ncmcpp \
 ## Desktop and everyday tools
 
 - Choose utilities from the [script index](../scripts/README.md).
-- Configure the [dwmblocks status modules](../dwmblocks/README.md).
+- Configure the separately maintained
+  [dwmblocks status modules](https://github.com/se-kami/dwmblocks-modules).
 - Follow the separate build instructions for
   [dwm](https://github.com/se-kami/dwm) and [st](https://github.com/se-kami/st).
